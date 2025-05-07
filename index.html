@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Payment Link</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="https://lighteningapp.s3.us-west-2.amazonaws.com/splash.png">
+  <meta property="og:title" content="Lightening Rupee">
+  <meta property="og:image" content="https://lighteningapp.s3.us-west-2.amazonaws.com/splash.png">
+  <meta property="og:description" content="Checkout this app">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Firebase App and Firestore SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDNtM_gKtnwLkZPosYbmwORfBSb92TXI-A",
+      authDomain: "valencia-e6020.firebaseapp.com",
+      projectId: "valencia-e6020",
+      storageBucket: "valencia-e6020.appspot.com",
+      messagingSenderId: "488433521618",
+      appId: "1:488433521618:web:1519d3c5d2c0ec9c036e0b"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Fetch data from Firestore
+    async function fetchPaymentData() {
+      try {
+        const doc = await db.collection("paymentDetails").doc("wsamXOCg9GSBaoFWz8lQ").get();
+        const data = doc.data();
+
+        document.getElementById("amount").textContent = `₹${data.amount}`;
+        document.getElementById("name").textContent = data.name;
+        document.getElementById("vpa").textContent = data.vpa;
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    function copyToClipboard(text) {
+      const dummy = document.createElement("textarea");
+      document.body.appendChild(dummy);
+      dummy.value = text;
+      dummy.select();
+      document.execCommand("copy");
+      document.body.removeChild(dummy);
+      alert("Copied to clipboard: " + text);
+    }
+
+    function showSuccess() {
+      document.getElementById("success-msg").classList.remove("hidden");
+    }
+
+    setTimeout(function () {
+      document.getElementById("splash-screen").style.display = "none";
+    }, 5000);
+
+    window.onload = fetchPaymentData;
+  </script>
+
+  <style>
+    .center {
+      text-align: center;
+    }
+    .bold {
+      font-weight: bold;
+      font-size: 20px;
+    }
+    .small {
+      font-size: 12px !important;
+    }
+    .medium {
+      font-size: 14px !important;
+    }
+    .fixed-width {
+      width: 50px !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+    }
+  </style>
+</head>
+
+<body class="p-2">
+  <!-- Splash screen -->
+  <div id="splash-screen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #2fbb13; z-index: 9999;">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+      <img src="https://lighteningapp.s3.us-west-2.amazonaws.com/splash.png" alt="Splash Screen Image" width="100%">
+    </div>
+  </div>
+
+  <div class="center mt-8">
+    <p class="bold">Payment Link</p>
+  </div>
+
+  <!-- Step 1: Copy Amount and Bank Account Information -->
+  <div class="p-1 border-dashed border-[1px] border-gray-600 mt-5">
+    <div class="bg-[#29b6fe] medium text-white px-2 py-3 text-lg">
+      Step 1: Copy Amount and Bank Account Information
+    </div>
+    <div class="grid grid-cols-1 divide-y">
+      <div class="flex justify-between items-center p-3">
+        <p class="font-bold small text-xl text-[#5a5771]">Amount</p>
+        <div class="flex items-center">
+          <p id="amount" class="font-bold small text-xl text-[#df9e2f] mr-2">Loading...</p>
+          <button class="bg-[#389dff] small px-3 py-2 text-white rounded" onclick="copyToClipboard(document.getElementById('amount').textContent)">Copy</button>
+        </div>
+      </div>
+      <div class="flex justify-between items-center p-3">
+        <p class="font-bold small text-xl text-[#5a5771]">Name</p>
+        <div class="flex items-center">
+          <p id="name" class="font-bold small fixed-width text-xl text-[#df9e2f] mr-2">Loading...</p>
+          <button class="bg-[#389dff] small px-3 py-2 text-white rounded" onclick="copyToClipboard(document.getElementById('name').textContent)">Copy</button>
+        </div>
+      </div>
+      <div class="flex justify-between items-center p-3">
+        <p class="font-bold small text-xl text-[#5a5771]">VPA/UPI</p>
+        <div class="flex items-center">
+          <p id="vpa" class="font-bold small text-xl text-[#df9e2f] mr-2">Loading...</p>
+          <button class="bg-[#389dff] small px-3 py-2 text-white rounded" onclick="copyToClipboard(document.getElementById('vpa').textContent)">Copy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="p-1 border-dashed border-[1px] border-gray-600 mt-5">
+    <div class="bg-[#29b6fe] medium text-white px-2 py-3 text-lg">
+      Step 2: Transfer and don't modify this amount to us.
+    </div>
+    <div class="flex items-center p-2">
+      <img src="https://img.icons8.com/ios/24/aa6e5c/error--v1.png" alt="Warning Icon" />
+      <p class="ml-2 small">Please record your reference No. (Ref No.) after payment</p>
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="p-1 border-dashed border-[1px] border-gray-600 mt-5">
+    <div class="bg-[#29b6fe] medium text-white px-2 py-3 text-lg">
+      Step 3: Please Enter Ref No. to complete the recharge
+    </div>
+    <div class="flex items-center p-2">
+      <img src="https://img.icons8.com/ios/24/aa6e5c/error--v1.png" alt="Warning Icon" />
+      <p class="ml-2 small">Be sure to return to this page to fill the UTR Numbers after you have completed your payment.</p>
+    </div>
+    <div class="w-full mx-auto mt-2">
+      <textarea class="w-full medium p-4 text-xl text-center placeholder-gray-400 focus:outline-none" placeholder="UTR (UPI Ref.ID) must be 12 digits"></textarea>
+    </div>
+  </div>
+
+  <br>
+  <button class="w-full bg-[#29b6fe] hover:bg-green-600 text-white font-bold py-2 px-4 rounded" onclick="showSuccess()">Submit UTR</button>
+  <div id="success-msg" class="hidden mt-4 flex items-center justify-center">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+    </svg>
+    <p class="text-green-500 font-bold">Submit Successfully!</p>
+  </div>
+</body>
+</html>
